@@ -98,7 +98,7 @@ public class BubbleController : MonoBehaviour
                 );
 
             bubbles.Add(newBubble);
-            bubbleObj.SetActive(false);
+            //bubbleObj.SetActive(false);
         }
     }
     BubbleType ChooseRandomBubbleType()
