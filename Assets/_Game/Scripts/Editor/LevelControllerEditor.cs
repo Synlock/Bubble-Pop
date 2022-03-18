@@ -1,16 +1,19 @@
 using UnityEngine;
+using UnityEditor;
 
-public class LevelControllerEditor : MonoBehaviour
+[CustomEditor(typeof(LevelController))]
+public class LevelControllerEditor : Editor
 {
-    // Start is called before the first frame update
-    void Start()
+    public override void OnInspectorGUI()
     {
-        
-    }
+        DrawDefaultInspector();
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        LevelController myScript = (LevelController)target;
+
+        if (GUILayout.Button("Save Level Controller"))
+            myScript.SaveLevelDatasToJSON();
+
+        if (GUILayout.Button("Load Level Controller"))
+            myScript.SaveLevelDatasToJSON();
     }
 }

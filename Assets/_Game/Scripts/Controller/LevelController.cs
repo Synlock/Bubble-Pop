@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
 [Serializable]
@@ -68,30 +69,5 @@ public class LevelController : MonoBehaviour
         bubbleController.SetMaxBubbles(maxBubs);
         bubbleController.SetAmountAllowed(amountAllowed);
         bubbleController.SetChooseRandomly(isRandom);
-    }
-    public void SaveLevelDatasToJSON()
-    {
-        /* string full="";
-         for (int i = 0; i < levelDatas.Count; i++)
-         {
-         string json = JsonUtility.ToJson(levelDatas[i]);
-             full += json;
-         }
-
-         *//*full = full.Replace("{", "");
-         full = full.Replace("}", ",");*//*
-
-         int lastIndexInFull = 0;
-         for (int i = 0; i < full.Length; i++)
-         {
-             lastIndexInFull++;
-         }
-
-         *//*full = full.Insert(0, "{");
-         full = full.Insert(lastIndexInFull, "}");*/
-
-        string full = JsonUtility.ToJson(this);
-
-        print(full);
     }
 }
