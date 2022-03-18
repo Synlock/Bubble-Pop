@@ -69,12 +69,14 @@ public class LevelController : MonoBehaviour
         bubbleController.SetAmountAllowed(amountAllowed);
         bubbleController.SetChooseRandomly(isRandom);
     }
-    public void Save(bool isSave)
+    public void Save(string filePath, string dirPath)
     {
-        string json = SaveLoad.SaveLevelDatasToJSON(this, "Assets/Resources/level-data.json");
+        string json = SaveLoad.SaveToJSON(this, filePath, dirPath);
+        File.WriteAllText(filePath, json);
     }
-    public void Load()
+    public void Load(string path)
     {
-        //SaveLoad.LoadLevelDatasFromJSON(this);
+        string json = File.ReadAllText(path);
+        SaveLoad.LoadFromJSON(json,this);
     }
 }

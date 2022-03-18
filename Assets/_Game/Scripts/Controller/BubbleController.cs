@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 public class BubbleController : MonoBehaviour
 {
+    //TODO: fix bubbles list - when not empty, random doesnt work
     [SerializeField] GameObject defaultBubblePrefab;
     [SerializeField] GameObject[] bubblePrefabs = new GameObject[1];
     [SerializeField] ParticleSystem defaultPopVFX;
