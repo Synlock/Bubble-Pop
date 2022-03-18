@@ -5,6 +5,7 @@ public class PlayerController : MonoBehaviour
 {
     PlayerData playerData;
     int score;
+    int currentLevel = 0;
 
     [SerializeField] LayerMask layer;
 
@@ -15,7 +16,7 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
-        playerData = new PlayerData(score);
+        playerData = new PlayerData(score, currentLevel);
         cam = Camera.main;
         OnMousePressed += OnMousePressedHandler;
     }
@@ -31,11 +32,13 @@ public class PlayerController : MonoBehaviour
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit, 100f, layer))
             {
-                Debug.DrawRay(cam.transform.position, ray.direction * 100f, Color.red);
                 var bubble = hit.collider.GetComponent<Bubble>();
+
                 score += bubble.GetBubbleData().GetScore();
                 playerData.SetScore(score);
-                Destroy(bubble.gameObject, 0.5f);
+
+                BubbleController.OnBubblePopped.Invoke(bubble.transform.position);
+                bubble.gameObject.SetActive(false);
             }
         }
     }

@@ -7,20 +7,23 @@ public enum SpawnPoint { Top, Bottom, Left, Right }
 public class BubbleData
 {
     //TODO:
-    //1. change colors through editor
-    //2. implement object pooling
-    //3. make bubbles poppable
-    //4. implement score feature
+    //3. make bubbles poppable - improve
+    //4. implement score feature - improve
     [SerializeField] GameObject bubbleObj;
     [SerializeField] Transform bubbleTransform;
     [SerializeField] BubbleType bubbleType;
     [SerializeField] MeshRenderer meshRenderer;
     [SerializeField] Color color;
     [SerializeField] ParticleSystem particles;
+    [SerializeField] AudioClip audioClip;
+    [SerializeField] AudioSource audioSource;
     [SerializeField] SpawnPoint spawnPoint;
     [SerializeField] float speed;
     [SerializeField] float timeBetweenSpawns;
     [SerializeField] int score;
+    [SerializeField] int minScore;
+    [SerializeField] int maxScore;
+    [SerializeField] bool standardSpecs;
 
     #region Getters
     public GameObject GetGameObject() => bubbleObj;
@@ -29,10 +32,15 @@ public class BubbleData
     public MeshRenderer GetMeshRenderer() => meshRenderer;
     public Color GetColor() => color;
     public ParticleSystem GetParticleSystem() => particles;
+    public AudioClip GetAudioClip() => audioClip;
+    public AudioSource GetAudioSource() => audioSource;
     public SpawnPoint GetSpawnPoint() => spawnPoint;
     public float GetSpeed() => speed;
     public float GetTimeBetweenSpawns() => timeBetweenSpawns;
     public int GetScore() => score;
+    public int GetMinScore() => minScore;
+    public int GetMaxScore() => maxScore;
+    public bool GetStandardSpecs() => standardSpecs;
     #endregion
 
     #region Setters
@@ -42,75 +50,125 @@ public class BubbleData
     public void SetMeshRenderer(MeshRenderer newRenderer) => meshRenderer = newRenderer;
     public void SetColor(Color newColor) => color = newColor;
     public void SetParticleSystem(ParticleSystem newParticleSystem) => particles = newParticleSystem;
+    public void SetAudioClip(AudioClip newAudioClip) => audioClip = newAudioClip; 
+    public void SetAudioSource(AudioSource newAudioSource) => audioSource = newAudioSource;
     public void SetSpawnPoint(SpawnPoint newSpawnPoint) => spawnPoint = newSpawnPoint;
     public void SetSpeed(float newSpeed) => speed = newSpeed;
     public void SetTimeBetweenSpawns(float newTimeBetweenSpawns) => timeBetweenSpawns = newTimeBetweenSpawns;
     public void SetScore(int newScore) => score = newScore;
+    public void SetMinScore(int newMinScore) => score = newMinScore;
+    public void SetMaxScore(int newMaxScore) => score = newMaxScore;
+    public void SetStandardSpecs(bool isStandard) => standardSpecs = isStandard;
     #endregion
 
-    public BubbleData(GameObject bubbleObj, BubbleType bubbleType, ParticleSystem particles,
-        SpawnPoint spawnPoint, float speed = 2f, float timeBetweenSpawns = 2f, int score = 0)
+    public BubbleData(
+        GameObject bubbleObj, BubbleType bubbleType, Color color, ParticleSystem particles, AudioClip audioClip,
+        SpawnPoint spawnPoint, int minScore, int maxScore, float speed = 20f, float timeBetweenSpawns = 2f, bool isStandard = true
+        )
     {
         meshRenderer = bubbleObj.GetComponent<MeshRenderer>();
         bubbleTransform = bubbleObj.GetComponent<Transform>();
 
+        if (audioSource != null)
+            audioSource = bubbleObj.GetComponent<AudioSource>();
+
         this.bubbleObj = bubbleObj;
         this.bubbleType = bubbleType;
+        this.color = color;
         this.particles = particles;
+        this.audioClip = audioClip;
         this.spawnPoint = spawnPoint;
         this.speed = speed;
         this.timeBetweenSpawns = timeBetweenSpawns;
-        this.score = score;
+        this.minScore = minScore;
+        this.maxScore = maxScore;
+        standardSpecs = isStandard;
 
-        BubbleTypeHandler(bubbleType, meshRenderer,this);
+        BubbleTypeHandler(bubbleType, meshRenderer, color, this, isStandard);
 
         SpawnPointHandler(spawnPoint, bubbleTransform);
     }
 
-    void BubbleTypeHandler(BubbleType bubbleType, MeshRenderer meshRenderer, BubbleData data)
+    public void BubbleTypeHandler(BubbleType bubbleType, MeshRenderer meshRenderer, Color color, BubbleData data, bool isStandard)
     {
         switch (bubbleType)
         {
             case BubbleType.Purple:
-                Color purpleHeartColor = new Color(0.5f, 0.14f, 0.75f, 1f); //Purple Heart #8025BE
-                meshRenderer.material.color = purpleHeartColor; 
-                meshRenderer.gameObject.name = $"Purple Bubble";
-                data.SetScore(Random.Range(8,16));
+                if (isStandard)
+                {
+                    Color purpleHeartColor = new Color(0.5f, 0.14f, 0.75f, 1f); //Purple Heart #8025BE
+                    ChooseTypeSpecs(meshRenderer, purpleHeartColor, "Purple Bubble", data, 8, 16);
+                    return;
+                }
+                ChooseTypeSpecs(meshRenderer, color, "Purple Bubble", data, data.minScore, data.maxScore);
                 break;
 
             case BubbleType.Green:
-                meshRenderer.material.color = Color.green;
-                meshRenderer.gameObject.name = $"Green Bubble";
-                data.SetScore(Random.Range(16,25));
+                if (isStandard)
+                {
+                    ChooseTypeSpecs(meshRenderer, Color.green, "Green Bubble", data, 16, 25);
+                    return;
+                }
+                ChooseTypeSpecs(meshRenderer, color, "Green Bubble", data, data.minScore, data.maxScore);
                 break;
 
             case BubbleType.Blue:
-                meshRenderer.material.color = Color.blue;
-                meshRenderer.gameObject.name = $"Blue Bubble";
-                data.SetScore(Random.Range(25,37));
+                if (isStandard)
+                {
+                    ChooseTypeSpecs(meshRenderer, Color.blue, "Blue Bubble", data, 25, 36);
+                    return;
+                }
+                ChooseTypeSpecs(meshRenderer, color, "Blue Bubble", data, data.minScore, data.maxScore);
                 break;
 
             case BubbleType.Orange:
-                Color sunColor = new Color(1f, 0.39f, 0f, 1f); //Blaze Orange #FF6400
-                meshRenderer.material.color = sunColor; 
-                meshRenderer.gameObject.name = $"Orange Bubble";
-                data.SetScore(Random.Range(37,49));
+                if (isStandard)
+                {
+                    Color blazeOrangeColor = new Color(1f, 0.39f, 0f, 1f); //Blaze Orange #FF6400
+                    ChooseTypeSpecs(meshRenderer, blazeOrangeColor, "Orange Bubble", data, 37, 49);
+                    return;
+                }
+                ChooseTypeSpecs(meshRenderer, color, "Orange Bubble", data, data.minScore, data.maxScore);
                 break;
 
             case BubbleType.Yellow:
-                meshRenderer.material.color = Color.yellow;
-                meshRenderer.gameObject.name = $"Yellow Bubble";
-                data.SetScore(Random.Range(49,61));
+                if (isStandard)
+                {
+                    ChooseTypeSpecs(meshRenderer, Color.yellow, "Yellow Bubble", data, 49, 61);
+                    return;
+                }
+                ChooseTypeSpecs(meshRenderer, color, "Yellow Bubble", data, data.minScore, data.maxScore);
                 break;
 
             case BubbleType.Red:
-                meshRenderer.material.color = Color.red;
-                meshRenderer.gameObject.name = $"Red Bubble";
-                data.SetScore(Random.Range(61,71));
+                if (isStandard)
+                {
+                    ChooseTypeSpecs(meshRenderer, Color.red, "Red Bubble", data, 61, 70);
+                    return;
+                }
+                ChooseTypeSpecs(meshRenderer, color, "Red Bubble", data, data.minScore, data.maxScore);
                 break;
         }
     }
-    void SpawnPointHandler(SpawnPoint spawnPoint, Transform bubbleTransform)
+    void ChooseTypeSpecs(MeshRenderer meshRenderer, Color color, string objName, BubbleData data, int minScore, int maxScore)
+    {
+        meshRenderer.material.color = color;
+        meshRenderer.gameObject.name = objName;
+
+        data.SetMinScore(minScore);
+        data.SetMaxScore(maxScore);
+        int score = ChooseRandomScore(minScore, maxScore);
+
+        data.SetScore(score);
+    }
+    int ChooseRandomScore(int min, int max)
+    {
+        int newNum;
+        newNum = Random.Range(min, max);
+        return newNum;
+    }
+
+    public void SpawnPointHandler(SpawnPoint spawnPoint, Transform bubbleTransform)
     {
         Vector3 worldPos = Camera.main.ScreenToWorldPoint(ScreenDimensions.GetScreenDimensions());
 

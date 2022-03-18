@@ -171,6 +171,69 @@ MonoBehaviour:
   scoreText: {fileID: 1287710792}
   sliderTimeSpeed: 1
   sliderMaxTime: 30
+--- !u!1 &240622265
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 240622266}
+  - component: {fileID: 240622267}
+  m_Layer: 0
+  m_Name: LevelController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &240622266
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 240622265}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 598473721}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &240622267
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 240622265}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97c10d55b85910c47a34c4445184022d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bubbleController: {fileID: 1907397724}
+  levelDatas:
+  - level: 1
+    bubbles: []
+    vfxs: []
+    bubblePrefabs: []
+    maxBubbles: 0
+    amountAllowedAtOnce: 0
+    chooseBubblesRandomly: 1
+  currentLevel: 1
+  maxLevel: 100
+  bubbles: []
+  vfxs:
+  - {fileID: 0}
+  bubblePrefabs:
+  - {fileID: 0}
+  maxBubbles: 10
+  amountAllowedAtOnce: 5
+  chooseBubblesRandomly: 0
 --- !u!1 &272938664
 GameObject:
   m_ObjectHideFlags: 0
@@ -340,8 +403,9 @@ Transform:
   - {fileID: 1907397723}
   - {fileID: 272938665}
   - {fileID: 99120738}
+  - {fileID: 240622266}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &617003788
 GameObject:
@@ -499,13 +563,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 624993390}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &662785248
 GameObject:
@@ -985,7 +1049,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -12.64}
+  m_LocalPosition: {x: 0, y: 0, z: -23.16}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1412,7 +1476,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1734221740
 Transform:
   m_ObjectHideFlags: 0
@@ -1556,70 +1620,18 @@ MonoBehaviour:
   defaultBubblePrefab: {fileID: 6687386430178807163, guid: f8e61018760242d47b42731d18295a8a, type: 3}
   bubblePrefabs:
   - {fileID: 0}
-  bubbles:
-  - bubbleObj: {fileID: 6687386430178807163, guid: f8e61018760242d47b42731d18295a8a, type: 3}
-    bubbleTransform: {fileID: 0}
-    bubbleType: 0
-    meshRenderer: {fileID: 0}
-    color: {r: 0, g: 0, b: 0, a: 0}
-    particles: {fileID: 0}
-    spawnPoint: 0
-    speed: 50
-    timeBetweenSpawns: 2
-    score: 41
-  - bubbleObj: {fileID: 6687386430178807163, guid: f8e61018760242d47b42731d18295a8a, type: 3}
-    bubbleTransform: {fileID: 0}
-    bubbleType: 1
-    meshRenderer: {fileID: 0}
-    color: {r: 0, g: 0, b: 0, a: 0}
-    particles: {fileID: 0}
-    spawnPoint: 1
-    speed: 47
-    timeBetweenSpawns: 5
-    score: 22
-  - bubbleObj: {fileID: 6687386430178807163, guid: f8e61018760242d47b42731d18295a8a, type: 3}
-    bubbleTransform: {fileID: 0}
-    bubbleType: 2
-    meshRenderer: {fileID: 0}
-    color: {r: 0, g: 0, b: 0, a: 0}
-    particles: {fileID: 0}
-    spawnPoint: 2
-    speed: 74
-    timeBetweenSpawns: 4
-    score: 24
-  - bubbleObj: {fileID: 6687386430178807163, guid: f8e61018760242d47b42731d18295a8a, type: 3}
-    bubbleTransform: {fileID: 0}
-    bubbleType: 3
-    meshRenderer: {fileID: 0}
-    color: {r: 0, g: 0, b: 0, a: 0}
-    particles: {fileID: 0}
-    spawnPoint: 3
-    speed: 36
-    timeBetweenSpawns: 7
-    score: 88
-  - bubbleObj: {fileID: 6687386430178807163, guid: f8e61018760242d47b42731d18295a8a, type: 3}
-    bubbleTransform: {fileID: 0}
-    bubbleType: 4
-    meshRenderer: {fileID: 0}
-    color: {r: 0, g: 0, b: 0, a: 0}
-    particles: {fileID: 0}
-    spawnPoint: 0
-    speed: 36
-    timeBetweenSpawns: 7
-    score: 88
-  - bubbleObj: {fileID: 6687386430178807163, guid: f8e61018760242d47b42731d18295a8a, type: 3}
-    bubbleTransform: {fileID: 0}
-    bubbleType: 5
-    meshRenderer: {fileID: 0}
-    color: {r: 0, g: 0, b: 0, a: 0}
-    particles: {fileID: 0}
-    spawnPoint: 0
-    speed: 50
-    timeBetweenSpawns: 7
-    score: 88
+  defaultPopVFX: {fileID: 424876315248265468, guid: 47b3170b5f482d7428555c11508d4d1f, type: 3}
+  popVFXs:
+  - {fileID: 424876315248265468, guid: 47b3170b5f482d7428555c11508d4d1f, type: 3}
+  - {fileID: 424876315248265468, guid: 47b3170b5f482d7428555c11508d4d1f, type: 3}
+  - {fileID: 424876315248265468, guid: 47b3170b5f482d7428555c11508d4d1f, type: 3}
+  - {fileID: 424876315248265468, guid: 47b3170b5f482d7428555c11508d4d1f, type: 3}
+  popVFXsParent: {fileID: 0}
+  bubbles: []
   bubblesParent: {fileID: 0}
   maxBubbles: 10
-  chooseRandomly: 0
+  amountAllowedAtOnce: 5
+  chooseRandomly: 1
 --- !u!1 &1932047130
 GameObject:
   m_ObjectHideFlags: 0
@@ -1752,7 +1764,7 @@ RectTransform:
   - {fileID: 285707114}
   - {fileID: 1287710791}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}

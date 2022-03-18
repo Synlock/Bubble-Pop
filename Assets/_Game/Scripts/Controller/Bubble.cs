@@ -9,6 +9,8 @@ public class Bubble : MonoBehaviour
 
     public BubbleData GetBubbleData() => myData;
 
+    public void SetMoveDir(Vector2 newMoveDir) => moveDir = newMoveDir; 
+
     void Start()
     {
         rb = gameObject.AddComponent<Rigidbody>();
@@ -16,7 +18,12 @@ public class Bubble : MonoBehaviour
 
         controller = FindObjectOfType<BubbleController>();
 
-        if(transform == controller.GetBubblesParent().transform.GetChild(0))
+        InitMoveDirection();
+    }
+
+    void InitMoveDirection()
+    {
+        if (transform == controller.GetBubblesParent().transform.GetChild(0))
         {
             myData = controller.GetBubbles()[0];
             moveDir = BubbleData.CalculateBubbleDirection(myData.GetBubbleTransform().position, myData.GetSpeed(), myData.GetSpawnPoint());
