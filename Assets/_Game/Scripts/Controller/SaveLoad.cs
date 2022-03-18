@@ -1,9 +1,9 @@
 ﻿using System.IO;
 using UnityEngine;
 
-class SaveLoad
+public class SaveLoad
 {
-    public static void SaveLevelDatasToJSON(object objToSave, string path)
+    public static string SaveLevelDatasToJSON(object objToSave, string path)
     {
         string json = JsonUtility.ToJson(objToSave);
 
@@ -11,8 +11,8 @@ class SaveLoad
 
         if (!File.Exists(path))
             File.Create(path);
-        
 
+        return json;
     }
     public static void LoadLevelDatasFromJSON(string json, object objToLoad)
     {

@@ -29,7 +29,6 @@ public class LevelController : MonoBehaviour
         OnNextLevel += OnNextLevelHandler;
 
         InitLevelData();
-        SaveLevelDatasToJSON();
     }
 
     void InitLevelData()
@@ -69,5 +68,13 @@ public class LevelController : MonoBehaviour
         bubbleController.SetMaxBubbles(maxBubs);
         bubbleController.SetAmountAllowed(amountAllowed);
         bubbleController.SetChooseRandomly(isRandom);
+    }
+    public void Save(bool isSave)
+    {
+        string json = SaveLoad.SaveLevelDatasToJSON(this, "Assets/Resources/level-data.json");
+    }
+    public void Load()
+    {
+        //SaveLoad.LoadLevelDatasFromJSON(this);
     }
 }

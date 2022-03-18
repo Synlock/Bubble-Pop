@@ -10,10 +10,10 @@ public class LevelControllerEditor : Editor
 
         LevelController myScript = (LevelController)target;
 
-        if (GUILayout.Button("Save Level Controller"))
-            myScript.SaveLevelDatasToJSON();
+        if (GUILayout.Button("Save Level Controller")) { }
+            //myScript.SaveLevelDatasToJSON();
 
-        if (GUILayout.Button("Load Level Controller"))
-            myScript.SaveLevelDatasToJSON();
+        if (GUILayout.Button("Load Level Controller")) { }
+            //myScript.SaveLevelDatasToJSON();
     }
 }
