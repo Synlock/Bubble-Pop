@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using Newtonsoft.Json;
+using System.IO;
 using UnityEngine;
 
 public class SaveLoad
@@ -19,5 +20,16 @@ public class SaveLoad
     {
         JsonUtility.FromJsonOverwrite(json, objToLoad);
     }
+    //In progress vvv
+    /*public static string ObfuscateJSON(object objToObfuscate)
+    {
+        string obfJson = JsonConvert.SerializeObject(objToObfuscate);
+        return obfJson;
+    }
+    public static object DeobfuscateJSON(string objToDeobfuscate)
+    {
+        object obj = JsonConvert.DeserializeObject(objToDeobfuscate);
+        return obj;
+    }*/
 }
 

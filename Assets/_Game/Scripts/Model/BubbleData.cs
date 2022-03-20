@@ -68,9 +68,7 @@ public class BubbleData
     {
         meshRenderer = bubbleObj.GetComponent<MeshRenderer>();
         bubbleTransform = bubbleObj.GetComponent<Transform>();
-
-        if (audioSource != null)
-            audioSource = bubbleObj.GetComponent<AudioSource>();
+        audioSource = bubbleObj.GetComponent<AudioSource>();
 
         this.bubbleObj = bubbleObj;
         this.bubbleType = bubbleType;

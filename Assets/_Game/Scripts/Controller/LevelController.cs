@@ -8,25 +8,29 @@ public class LevelController : MonoBehaviour
 {
     [SerializeField] PlayerData playerData;
     [SerializeField] BubbleController bubbleController;
-    [SerializeField] List<LevelData> levelDatas = new List<LevelData>();
 
-    public int currentLevel = 1;
+    GameObject defaultBubble;
+    ParticleSystem defaultVfx;
+
     public int maxLevel = 100;
+    public int currentLevel = 1;
+    static int level;
 
-    public List<BubbleData> bubbles = new List<BubbleData>();
-    public ParticleSystem[] vfxs = new ParticleSystem[1];
-    public GameObject[] bubblePrefabs = new GameObject[1];
-
-    public int maxBubbles = 10;
-    public int amountAllowedAtOnce = 5;
-
-    public bool chooseBubblesRandomly = false;
+    [SerializeField] List<LevelData> levelDatas = new List<LevelData>();
 
     public static Action<int> OnNextLevel;
 
+    public static int GetCurrentLevel() => level;
+    public static void SetCurrentLevel(int newLevel) => level = newLevel;
+
     void Awake()
     {
+        defaultBubble = bubbleController.GetDefaultBubblePrefab();
+        defaultVfx = bubbleController.GetDefaultPopVFX();
+
         OnNextLevel += OnNextLevelHandler;
+
+        level = currentLevel;
 
         InitLevelData();
     }
@@ -35,33 +39,41 @@ public class LevelController : MonoBehaviour
     {
         for (int i = 0; i < maxLevel; i++)
         {
-            if (levelDatas.Count - 1 < maxLevel)
+            if (levelDatas.Count < maxLevel)
                 levelDatas.Add(new LevelData());
 
             int newLevel = i + 1;
-            LevelData levelData = new LevelData(
-                newLevel, bubbles, vfxs, bubblePrefabs, maxBubbles, amountAllowedAtOnce, chooseBubblesRandomly
-                );
 
-            if (levelDatas[i].level == newLevel) continue;
+            LevelData data = levelDatas[i];
+            LevelData levelData = new LevelData(
+                newLevel, defaultBubble, defaultVfx,
+                data.bubbles, data.vfxs, data.bubblePrefabs,
+                data.maxBubbles, data.amountAllowedAtOnce, data.chooseBubblesRandomly
+                );
 
             levelDatas[i] = levelData;
         }
     }
 
-    //TODO:  pull current level data from player data
     void OnNextLevelHandler(int index)
     {
         LevelData levelData = levelDatas[index];
-        int level = levelData.level;
 
-        List<BubbleData> bubbles = levelDatas[level].bubbles;
-        ParticleSystem[] vfx = levelDatas[level].vfxs;
-        GameObject[] prefabs = levelDatas[level].bubblePrefabs;
-        int maxBubs = levelDatas[level].maxBubbles;
-        int amountAllowed = levelDatas[level].amountAllowedAtOnce;
-        bool isRandom = levelDatas[level].chooseBubblesRandomly;
+        GameObject defaultBubblePrefab = levelData.defaultBubblePrefab;
+        ParticleSystem defaultVFXPrefab = levelData.defaultVfx;
 
+        List<BubbleData> bubbles = new List<BubbleData>(levelData.bubbles);
+        ParticleSystem[] vfx = levelData.vfxs;
+        GameObject[] prefabs = levelData.bubblePrefabs;
+        int maxBubs = levelData.maxBubbles;
+        int amountAllowed = levelData.amountAllowedAtOnce;
+        bool isRandom = levelData.chooseBubblesRandomly;
+
+        if (isRandom && bubbles.Count > 0)
+            isRandom = false;
+
+        bubbleController.SetDefaultBubblesPrefab(defaultBubblePrefab);
+        bubbleController.SetDefaultPopVFX(defaultVFXPrefab);
         bubbleController.SetBubbles(bubbles);
         bubbleController.SetPopVFXs(vfx);
         bubbleController.SetBubblePrefabs(prefabs);
@@ -69,6 +81,7 @@ public class LevelController : MonoBehaviour
         bubbleController.SetAmountAllowed(amountAllowed);
         bubbleController.SetChooseRandomly(isRandom);
     }
+
     public void Save(string filePath, string dirPath)
     {
         string json = SaveLoad.SaveToJSON(this, filePath, dirPath);
@@ -77,6 +90,6 @@ public class LevelController : MonoBehaviour
     public void Load(string path)
     {
         string json = File.ReadAllText(path);
-        SaveLoad.LoadFromJSON(json,this);
+        SaveLoad.LoadFromJSON(json, this);
     }
 }

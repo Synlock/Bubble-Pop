@@ -167,10 +167,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7321dbac976b4a041ae52c099926574e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  slider: {fileID: 285707115}
+  levelTimeSlider: {fileID: 285707115}
   scoreText: {fileID: 1287710792}
   sliderTimeSpeed: 1
-  sliderMaxTime: 30
+  levelTime: 2
 --- !u!1 &240622265
 GameObject:
   m_ObjectHideFlags: 0
@@ -216,24 +216,136 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bubbleController: {fileID: 1907397724}
+  maxLevel: 100
+  currentLevel: 1
   levelDatas:
   - level: 1
-    bubbles: []
-    vfxs: []
-    bubblePrefabs: []
-    maxBubbles: 0
-    amountAllowedAtOnce: 0
+    defaultBubblePrefab: {fileID: 6687386430178807163, guid: f8e61018760242d47b42731d18295a8a, type: 3}
+    defaultVfx: {fileID: 424876315248265468, guid: 47b3170b5f482d7428555c11508d4d1f, type: 3}
+    bubbles:
+    - bubbleObj: {fileID: 6687386430178807163, guid: f8e61018760242d47b42731d18295a8a, type: 3}
+      bubbleTransform: {fileID: 0}
+      bubbleType: 0
+      meshRenderer: {fileID: 0}
+      color: {r: 0, g: 0, b: 0, a: 0}
+      particles: {fileID: 424876315248265468, guid: 47b3170b5f482d7428555c11508d4d1f, type: 3}
+      audioClip: {fileID: 0}
+      audioSource: {fileID: 0}
+      spawnPoint: 0
+      speed: 0
+      timeBetweenSpawns: 0
+      score: 0
+      minScore: 0
+      maxScore: 0
+      standardSpecs: 1
+    - bubbleObj: {fileID: 6687386430178807163, guid: f8e61018760242d47b42731d18295a8a, type: 3}
+      bubbleTransform: {fileID: 0}
+      bubbleType: 2
+      meshRenderer: {fileID: 0}
+      color: {r: 0, g: 0, b: 0, a: 0}
+      particles: {fileID: 424876315248265468, guid: 47b3170b5f482d7428555c11508d4d1f, type: 3}
+      audioClip: {fileID: 0}
+      audioSource: {fileID: 0}
+      spawnPoint: 0
+      speed: 0
+      timeBetweenSpawns: 0
+      score: 0
+      minScore: 0
+      maxScore: 0
+      standardSpecs: 1
+    - bubbleObj: {fileID: 6687386430178807163, guid: f8e61018760242d47b42731d18295a8a, type: 3}
+      bubbleTransform: {fileID: 0}
+      bubbleType: 5
+      meshRenderer: {fileID: 0}
+      color: {r: 0, g: 0, b: 0, a: 0}
+      particles: {fileID: 424876315248265468, guid: 47b3170b5f482d7428555c11508d4d1f, type: 3}
+      audioClip: {fileID: 0}
+      audioSource: {fileID: 0}
+      spawnPoint: 0
+      speed: 0
+      timeBetweenSpawns: 0
+      score: 0
+      minScore: 0
+      maxScore: 0
+      standardSpecs: 1
+    - bubbleObj: {fileID: 6687386430178807163, guid: f8e61018760242d47b42731d18295a8a, type: 3}
+      bubbleTransform: {fileID: 0}
+      bubbleType: 5
+      meshRenderer: {fileID: 0}
+      color: {r: 0, g: 0, b: 0, a: 0}
+      particles: {fileID: 424876315248265468, guid: 47b3170b5f482d7428555c11508d4d1f, type: 3}
+      audioClip: {fileID: 0}
+      audioSource: {fileID: 0}
+      spawnPoint: 0
+      speed: 0
+      timeBetweenSpawns: 0
+      score: 0
+      minScore: 0
+      maxScore: 0
+      standardSpecs: 1
+    - bubbleObj: {fileID: 6687386430178807163, guid: f8e61018760242d47b42731d18295a8a, type: 3}
+      bubbleTransform: {fileID: 0}
+      bubbleType: 5
+      meshRenderer: {fileID: 0}
+      color: {r: 0, g: 0, b: 0, a: 0}
+      particles: {fileID: 424876315248265468, guid: 47b3170b5f482d7428555c11508d4d1f, type: 3}
+      audioClip: {fileID: 0}
+      audioSource: {fileID: 0}
+      spawnPoint: 0
+      speed: 0
+      timeBetweenSpawns: 0
+      score: 0
+      minScore: 0
+      maxScore: 0
+      standardSpecs: 1
+    - bubbleObj: {fileID: 6687386430178807163, guid: f8e61018760242d47b42731d18295a8a, type: 3}
+      bubbleTransform: {fileID: 0}
+      bubbleType: 5
+      meshRenderer: {fileID: 0}
+      color: {r: 0, g: 0, b: 0, a: 0}
+      particles: {fileID: 424876315248265468, guid: 47b3170b5f482d7428555c11508d4d1f, type: 3}
+      audioClip: {fileID: 0}
+      audioSource: {fileID: 0}
+      spawnPoint: 0
+      speed: 0
+      timeBetweenSpawns: 0
+      score: 0
+      minScore: 0
+      maxScore: 0
+      standardSpecs: 1
+    - bubbleObj: {fileID: 6687386430178807163, guid: f8e61018760242d47b42731d18295a8a, type: 3}
+      bubbleTransform: {fileID: 0}
+      bubbleType: 5
+      meshRenderer: {fileID: 0}
+      color: {r: 0, g: 0, b: 0, a: 0}
+      particles: {fileID: 424876315248265468, guid: 47b3170b5f482d7428555c11508d4d1f, type: 3}
+      audioClip: {fileID: 0}
+      audioSource: {fileID: 0}
+      spawnPoint: 0
+      speed: 0
+      timeBetweenSpawns: 0
+      score: 0
+      minScore: 0
+      maxScore: 0
+      standardSpecs: 1
+    vfxs:
+    - {fileID: 0}
+    bubblePrefabs:
+    - {fileID: 0}
+    maxBubbles: 5
+    amountAllowedAtOnce: 2
     chooseBubblesRandomly: 1
-  currentLevel: 1
-  maxLevel: 100
-  bubbles: []
-  vfxs:
-  - {fileID: 0}
-  bubblePrefabs:
-  - {fileID: 0}
-  maxBubbles: 10
-  amountAllowedAtOnce: 5
-  chooseBubblesRandomly: 0
+  - level: 2
+    defaultBubblePrefab: {fileID: 6687386430178807163, guid: f8e61018760242d47b42731d18295a8a, type: 3}
+    defaultVfx: {fileID: 424876315248265468, guid: 47b3170b5f482d7428555c11508d4d1f, type: 3}
+    bubbles: []
+    vfxs:
+    - {fileID: 424876315248265468, guid: 47b3170b5f482d7428555c11508d4d1f, type: 3}
+    bubblePrefabs:
+    - {fileID: 6687386430178807163, guid: f8e61018760242d47b42731d18295a8a, type: 3}
+    maxBubbles: 20
+    amountAllowedAtOnce: 10
+    chooseBubblesRandomly: 1
 --- !u!1 &272938664
 GameObject:
   m_ObjectHideFlags: 0
@@ -1622,9 +1734,6 @@ MonoBehaviour:
   - {fileID: 0}
   defaultPopVFX: {fileID: 424876315248265468, guid: 47b3170b5f482d7428555c11508d4d1f, type: 3}
   popVFXs:
-  - {fileID: 424876315248265468, guid: 47b3170b5f482d7428555c11508d4d1f, type: 3}
-  - {fileID: 424876315248265468, guid: 47b3170b5f482d7428555c11508d4d1f, type: 3}
-  - {fileID: 424876315248265468, guid: 47b3170b5f482d7428555c11508d4d1f, type: 3}
   - {fileID: 424876315248265468, guid: 47b3170b5f482d7428555c11508d4d1f, type: 3}
   popVFXsParent: {fileID: 0}
   bubbles: []

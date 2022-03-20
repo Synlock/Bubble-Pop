@@ -26,8 +26,11 @@ public class BubbleController : MonoBehaviour
 
     [Tooltip("Check TRUE if bubble pool will be chosen randomly")]
     [SerializeField] bool chooseRandomly = false;
+    static bool gameStarted = false;
 
     #region Getters
+    public GameObject GetDefaultBubblePrefab() => defaultBubblePrefab;
+    public ParticleSystem GetDefaultPopVFX() => defaultPopVFX;
     public List<BubbleData> GetBubbles() => bubbles;
     public GameObject GetBubblesParent() => bubblesParent;
     public ParticleSystem[] GetPopVFXs() => popVFXs;
@@ -35,9 +38,12 @@ public class BubbleController : MonoBehaviour
     public int GetMaxBubbles() => maxBubbles;
     public int GetAmountAllowed() => amountAllowedAtOnce;
     public bool GetChooseRandomly() => chooseRandomly;
+    public static bool GetGameStarted() => gameStarted;
     #endregion
 
     #region Setters
+    public void SetDefaultBubblesPrefab(GameObject newBubblePrefab) => defaultBubblePrefab = newBubblePrefab;
+    public void SetDefaultPopVFX(ParticleSystem newVfxPrefab) => defaultPopVFX = newVfxPrefab;
     public void SetBubbles(List<BubbleData> newBubbles) => bubbles = newBubbles;
     public void SetPopVFXs(ParticleSystem[] newVfx) => popVFXs = newVfx;
     public void SetBubblePrefabs(GameObject[] newPrefabs) => bubblePrefabs = newPrefabs;
@@ -47,17 +53,21 @@ public class BubbleController : MonoBehaviour
     #endregion
 
     public static Action<Vector3> OnBubblePopped;
+    public static Action OnInitBubbleController;
 
     void Awake()
     {
+        OnInitBubbleController += OnInitBubbleControllerHandler;
         OnBubblePopped += OnBubblePoppedHandler;
-
+    }
+    void OnInitBubbleControllerHandler()
+    {
         InitBubblePrefabs();
         InitPopVFXPrefabs();
 
         if (chooseRandomly)
         {
-            InitRandomBubblePool(maxBubbles, bubblesParent);
+            InitRandomBubblePool(bubbles, maxBubbles, bubblesParent);
         }
         else InitCustomBubblePool(bubbles);
 
@@ -90,8 +100,11 @@ public class BubbleController : MonoBehaviour
 
         foreach (ParticleSystem ps in popVFXs)
         {
-            GameObject vfxObj = Instantiate(ps.gameObject, popVFXsParent.transform);
-            popVFXsList.Add(vfxObj.GetComponent<ParticleSystem>());
+            for (int i = 0; i < 5; i++)
+            {
+                GameObject vfxObj = Instantiate(ps.gameObject, popVFXsParent.transform);
+                popVFXsList.Add(vfxObj.GetComponent<ParticleSystem>());
+            }
         }
     }
 
@@ -120,11 +133,16 @@ public class BubbleController : MonoBehaviour
 
             BubbleData data = new BubbleData(go, type, color, particles, clip,
                 point, minScore, maxScore, speed, spawnTime, standardColor);
+
             bubbles[i] = data;
+
+            bubbles[i].GetGameObject().SetActive(false);
         }
     }
-    void InitRandomBubblePool(int maxBubbles, GameObject bubblesParent)
+    void InitRandomBubblePool(List<BubbleData> bubbles, int maxBubbles, GameObject bubblesParent)
     {
+        
+
         for (int i = 0; i < maxBubbles; i++)
         {
             GameObject bubbleObj = Instantiate(
@@ -156,7 +174,7 @@ public class BubbleController : MonoBehaviour
     int bubbleIndex = 0;
     void OnBubblePoppedHandler(Vector3 previousPos)
     {
-        //TODO: fix object pool - sometimes click deactivates two bubbles
+        //TODO: fix object pool - first ball is bugged
         if (bubbleIndex >= bubbles.Count)
             bubbleIndex = 0;
 
@@ -165,10 +183,15 @@ public class BubbleController : MonoBehaviour
         {
             BubbleData bubble = bubbles[i];
 
-            if (activeBubbles >= amountAllowedAtOnce) break;
+            if (activeBubbles >= amountAllowedAtOnce)
+            {
+                gameStarted = true;
 
-            //TODO: fix VFX playing on start
-            ActivateVFX(previousPos, bubble);
+                break;
+            }
+
+            if (gameStarted)
+                ActivateVFX(previousPos, bubble);
 
             bubble.GetGameObject().SetActive(true);
 
@@ -233,5 +256,22 @@ public class BubbleController : MonoBehaviour
             return vfx;
         }
         return null;
+    }
+
+    public void ResetBubbleController()
+    {
+        gameStarted = false;
+        bubblePrefabs = new GameObject[1];
+        popVFXs = new ParticleSystem[1];
+        popVFXsList = new List<ParticleSystem>();
+        bubbles = new List<BubbleData>();
+        Destroy(bubblesParent);
+        Destroy(popVFXsParent);
+        maxBubbles = 10;
+        amountAllowedAtOnce = 5;
+        maxSpeed = 100f;
+        timeBetweenSpawns = 2f;
+        chooseRandomly = false;
+        bubbleIndex = 0;
     }
 }

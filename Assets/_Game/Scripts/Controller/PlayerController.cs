@@ -13,11 +13,13 @@ public class PlayerController : MonoBehaviour
     Action OnMousePressed;
 
     public int GetScore() => score;
+    public void SetScore(int newScore) => score = newScore;
 
     void Start()
     {
         playerData = new PlayerData(score, currentLevel);
         cam = Camera.main;
+
         OnMousePressed += OnMousePressedHandler;
     }
     void Update()
@@ -28,18 +30,23 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
-            Ray ray = cam.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
-            if (Physics.Raycast(ray, out hit, 100f, layer))
-            {
-                var bubble = hit.collider.GetComponent<Bubble>();
+            ClickToPopBubble(cam, playerData);
+        }
+    }
 
-                score += bubble.GetBubbleData().GetScore();
-                playerData.SetScore(score);
+    void ClickToPopBubble(Camera cam, PlayerData playerData)
+    {
+        Ray ray = cam.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit, 100f, layer))
+        {
+            var bubble = hit.collider.GetComponent<Bubble>();
 
-                BubbleController.OnBubblePopped.Invoke(bubble.transform.position);
-                bubble.gameObject.SetActive(false);
-            }
+            score += bubble.GetBubbleData().GetScore();
+            playerData.SetScore(score);
+
+            BubbleController.OnBubblePopped.Invoke(bubble.transform.position);
+            bubble.gameObject.SetActive(false);
         }
     }
 }

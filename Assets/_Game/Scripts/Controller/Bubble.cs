@@ -43,4 +43,11 @@ public class Bubble : MonoBehaviour
     {
         rb.velocity = moveDir * Time.fixedDeltaTime;
     }
+    void OnTriggerEnter(Collider other)
+    {
+        if(other.gameObject.layer == LayerMask.NameToLayer("Walls"))
+        {
+            //reduce life here on hit
+        }
+    }
 }
