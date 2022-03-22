@@ -3,21 +3,18 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    PlayerData playerData;
-    int score;
-    int currentLevel = 0;
+    static int score;
 
     [SerializeField] LayerMask layer;
 
     Camera cam;
     Action OnMousePressed;
 
-    public int GetScore() => score;
-    public void SetScore(int newScore) => score = newScore;
+    public static int GetScore() => score;
+    public static void SetScore(int newScore) => score = newScore;
 
     void Start()
     {
-        playerData = new PlayerData(score, currentLevel);
         cam = Camera.main;
 
         OnMousePressed += OnMousePressedHandler;
@@ -30,11 +27,11 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
-            ClickToPopBubble(cam, playerData);
+            ClickToPopBubble(cam);
         }
     }
 
-    void ClickToPopBubble(Camera cam, PlayerData playerData)
+    void ClickToPopBubble(Camera cam)
     {
         Ray ray = cam.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
@@ -43,7 +40,6 @@ public class PlayerController : MonoBehaviour
             var bubble = hit.collider.GetComponent<Bubble>();
 
             score += bubble.GetBubbleData().GetScore();
-            playerData.SetScore(score);
 
             BubbleController.OnBubblePopped.Invoke(bubble.transform.position);
             bubble.gameObject.SetActive(false);

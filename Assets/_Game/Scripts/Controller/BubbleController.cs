@@ -141,8 +141,6 @@ public class BubbleController : MonoBehaviour
     }
     void InitRandomBubblePool(List<BubbleData> bubbles, int maxBubbles, GameObject bubblesParent)
     {
-        
-
         for (int i = 0; i < maxBubbles; i++)
         {
             GameObject bubbleObj = Instantiate(
@@ -175,10 +173,15 @@ public class BubbleController : MonoBehaviour
     void OnBubblePoppedHandler(Vector3 previousPos)
     {
         //TODO: fix object pool - first ball is bugged
-        if (bubbleIndex >= bubbles.Count)
+        if (bubbleIndex >= bubbles.Count - 1)
             bubbleIndex = 0;
 
         int activeBubbles = FindObjectsOfType<Bubble>().Length;
+        BubbleObjectPooling(previousPos, activeBubbles);
+    }
+
+    /*void BubbleObjectPooling(Vector3 previousPos, int activeBubbles)
+    {
         for (int i = bubbleIndex; i < bubbles.Count; i++)
         {
             BubbleData bubble = bubbles[i];
@@ -202,6 +205,25 @@ public class BubbleController : MonoBehaviour
 
             bubbleIndex++;
         }
+    }*/
+    void BubbleObjectPooling(Vector3 previousPos, int activeBubbles)
+    {
+        for (int i = bubbleIndex; i < bubbles.Count; i++)
+        {
+            BubbleData bubble = bubbles[i];
+
+            if (activeBubbles >= amountAllowedAtOnce) break;
+
+            bubble.GetGameObject().SetActive(true);
+
+            if (bubble.GetGameObject().activeInHierarchy)
+                activeBubbles++;
+
+            ResetBubblePosition(bubble);
+
+            print($"Bubble Index: {bubbleIndex} - i: {i} \n Active Bubbles: {activeBubbles}");
+            bubbleIndex++;
+        }
     }
 
     void ActivateVFX(Vector3 previousPos, BubbleData bubble)
@@ -210,7 +232,7 @@ public class BubbleController : MonoBehaviour
         bubble.GetParticleSystem().transform.position = previousPos;
         bubble.GetParticleSystem().Play();
     }
-    void ResetBubblePosition(BubbleData bubble)
+    public void ResetBubblePosition(BubbleData bubble)
     {
         bubble.SpawnPointHandler(bubble.GetSpawnPoint(), bubble.GetBubbleTransform());
         bubble.GetGameObject().GetComponent<Bubble>().SetMoveDir(

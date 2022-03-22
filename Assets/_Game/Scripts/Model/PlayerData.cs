@@ -1,19 +1,18 @@
 ﻿[System.Serializable]
-class PlayerData
+public class PlayerData
 {
-    int score;
-    int currentLevel;
+    public int level;
 
-    public int GetScore() => score;
-    public int GetCurrentLevel() => currentLevel;
+    public int GetLevel() => level;
 
+    public void SetLevel(int newLevel) => level = newLevel;
 
-    public void SetScore(int newScore) => score = newScore;
-    public void SetCurrentLevel(int newCurrentLevel) => currentLevel = newCurrentLevel;
-
-    public PlayerData(int score, int currentLevel)
+    public PlayerData()
     {
-        this.score = score;
-        this.currentLevel = currentLevel;
+
+    }
+    public PlayerData(int level)
+    {
+        this.level = level;
     }
 }

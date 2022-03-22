@@ -42,9 +42,8 @@ public class MainMenuController : MonoBehaviour
     //TODO: pull current level from player data
     void OnNextLevelPressedHandler()
     {
-        //temp
-        LevelController.OnNextLevel.Invoke(LevelController.GetCurrentLevel() - 1);
-        LevelController.SetCurrentLevel(LevelController.GetCurrentLevel() + 1);
+        int currentLevel = LevelController.GetPlayerData().GetLevel();
+        LevelController.OnNextLevel.Invoke(currentLevel);
 
         BubbleController.OnInitBubbleController.Invoke();
         SceneManager.UnloadSceneAsync("MainMenu");

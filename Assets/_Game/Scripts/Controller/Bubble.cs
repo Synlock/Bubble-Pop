@@ -2,7 +2,8 @@ using UnityEngine;
 
 public class Bubble : MonoBehaviour
 {
-    BubbleController controller;
+    BubbleController bubbleController;
+    UiController uiController;
     BubbleData myData;
     Rigidbody rb;
     Vector2 moveDir;
@@ -16,26 +17,27 @@ public class Bubble : MonoBehaviour
         rb = gameObject.AddComponent<Rigidbody>();
         rb.useGravity = false;
 
-        controller = FindObjectOfType<BubbleController>();
+        bubbleController = FindObjectOfType<BubbleController>();
+        uiController = FindObjectOfType<UiController>();
 
         InitMoveDirection();
     }
 
     void InitMoveDirection()
     {
-        if (transform == controller.GetBubblesParent().transform.GetChild(0))
+        if (transform == bubbleController.GetBubblesParent().transform.GetChild(0))
         {
-            myData = controller.GetBubbles()[0];
+            myData = bubbleController.GetBubbles()[0];
             moveDir = BubbleData.CalculateBubbleDirection(myData.GetBubbleTransform().position, myData.GetSpeed(), myData.GetSpawnPoint());
             return;
         }
 
-        for (int i = 0; i < controller.GetBubbles().Count; i++)
+        for (int i = 0; i < bubbleController.GetBubbles().Count; i++)
         {
-            myData = controller.GetBubbles()[i];
+            myData = bubbleController.GetBubbles()[i];
             moveDir = BubbleData.CalculateBubbleDirection(myData.GetBubbleTransform().position, myData.GetSpeed(), myData.GetSpawnPoint());
 
-            if (transform == controller.GetBubblesParent().transform.GetChild(i)) break;
+            if (transform == bubbleController.GetBubblesParent().transform.GetChild(i)) break;
         }
     }
 
@@ -45,9 +47,12 @@ public class Bubble : MonoBehaviour
     }
     void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.layer == LayerMask.NameToLayer("Walls"))
+        if(other.gameObject.layer == LayerMask.NameToLayer(TAGS.WALLS_LAYER_NAME))
         {
-            //reduce life here on hit
+            LevelController.OnLoseLevel.Invoke(uiController.GetLevelTimeSlider());
+            LevelController.OnBubbleHitWall.Invoke();
+            BubbleController.OnBubblePopped.Invoke(gameObject.transform.position);
+            gameObject.SetActive(false);
         }
     }
 }

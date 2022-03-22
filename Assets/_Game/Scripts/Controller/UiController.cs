@@ -1,30 +1,22 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using System;
-using UnityEngine.SceneManagement;
 
 public class UiController : MonoBehaviour
 {
     PlayerController playerController;
-    BubbleController bubbleController;
 
     [SerializeField] Slider levelTimeSlider;
     [SerializeField] TMP_Text scoreText;
 
     [SerializeField] float sliderTimeSpeed = 1f;
-    [SerializeField] float levelTime = 30f;
 
-    bool levelEnded = false;
-
-    public static Action OnEndLevel;
+    public Slider GetLevelTimeSlider() => levelTimeSlider;
+    public TMP_Text GetScoreText() => scoreText;
 
     void Awake()
     {
-        OnEndLevel += OnEndLevelHandler;
-
         playerController = FindObjectOfType<PlayerController>();
-        bubbleController = FindObjectOfType<BubbleController>();
     }
     void Start()
     {
@@ -37,14 +29,14 @@ public class UiController : MonoBehaviour
     {
         if (BubbleController.GetGameStarted())
         {
-            OnEndLevel.Invoke();
+            LevelController.OnWinLevel.Invoke(levelTimeSlider, LevelController.GetLevelTime());
             UpdateSlider(levelTimeSlider, sliderTimeSpeed);
             UpdateScoreText(scoreText, playerController);
         }
     }
     void InitSlider(Slider slider)
     {
-        slider.maxValue = levelTime;
+        slider.maxValue = LevelController.GetLevelTime();
     }
 
     void UpdateSlider(Slider slider, float speed)
@@ -54,25 +46,6 @@ public class UiController : MonoBehaviour
     }
     void UpdateScoreText(TMP_Text scoreText, PlayerController playerController)
     {
-        scoreText.text = playerController.GetScore().ToString();
-    }
-
-    void OnEndLevelHandler()
-    {
-        if (levelTimeSlider.value >= levelTime)
-        {
-            levelEnded = true;
-            bubbleController.ResetBubbleController();
-
-            SceneManager.LoadSceneAsync("MainMenu", LoadSceneMode.Additive);
-
-            if (levelEnded)
-            {
-                levelTimeSlider.value = 0f;
-                playerController.SetScore(0);
-                levelEnded = false;
-                return;
-            }
-        }
+        scoreText.text = PlayerController.GetScore().ToString();
     }
 }
