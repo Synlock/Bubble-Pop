@@ -170,7 +170,6 @@ MonoBehaviour:
   levelTimeSlider: {fileID: 285707115}
   scoreText: {fileID: 1287710792}
   sliderTimeSpeed: 1
-  levelTime: 30
 --- !u!1 &240622265
 GameObject:
   m_ObjectHideFlags: 0
@@ -217,6 +216,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bubbleController: {fileID: 1907397724}
   maxLevel: 100
+  levelTime: 2
+  maxHitPoints: 3
   levelDatas:
   - level: 1
     defaultBubblePrefab: {fileID: 6687386430178807163, guid: f8e61018760242d47b42731d18295a8a, type: 3}
@@ -612,9 +613,60 @@ Transform:
   - {fileID: 272938665}
   - {fileID: 99120738}
   - {fileID: 240622266}
+  - {fileID: 603123096}
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &603123095
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 603123096}
+  - component: {fileID: 603123097}
+  m_Layer: 0
+  m_Name: PowerUpController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &603123096
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 603123095}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 598473721}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &603123097
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 603123095}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e56ba712340df7e42b24d11ea10c2ece, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  timeToSpawn: 1
+  powerUpPrefab: {fileID: 3273460271108961873, guid: e47fce2e91430fc48a86893f540e1f80, type: 3}
+  bubbleSize: 2
+  bubbleSpeed: 2
+  timeModifier: 10
+  healthModifier: 1
 --- !u!1 &617003788
 GameObject:
   m_ObjectHideFlags: 0

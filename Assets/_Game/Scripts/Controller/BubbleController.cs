@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class BubbleController : MonoBehaviour
 {
-    //TODO: fix bubbles list - when not empty, random doesnt work
+    public static BubbleController Instance;
+
     [SerializeField] GameObject defaultBubblePrefab;
     [SerializeField] GameObject[] bubblePrefabs = new GameObject[1];
     [SerializeField] ParticleSystem defaultPopVFX;
@@ -57,6 +58,9 @@ public class BubbleController : MonoBehaviour
 
     void Awake()
     {
+        if(Instance == null)
+            Instance = this;
+
         OnInitBubbleController += OnInitBubbleControllerHandler;
         OnBubblePopped += OnBubblePoppedHandler;
     }
@@ -164,6 +168,11 @@ public class BubbleController : MonoBehaviour
                 true
                 );
 
+            PlayerData pd = new PlayerData();
+            PlayerData.LoadPlayerData(pd);
+
+            newBubble.GetGameObject().GetComponent<MeshFilter>().mesh = pd.selectedMesh;
+
             bubbles.Add(newBubble);
             bubbleObj.SetActive(false);
         }
@@ -180,7 +189,7 @@ public class BubbleController : MonoBehaviour
         BubbleObjectPooling(previousPos, activeBubbles);
     }
 
-    /*void BubbleObjectPooling(Vector3 previousPos, int activeBubbles)
+    void BubbleObjectPooling(Vector3 previousPos, int activeBubbles)
     {
         for (int i = bubbleIndex; i < bubbles.Count; i++)
         {
@@ -203,25 +212,6 @@ public class BubbleController : MonoBehaviour
 
             ResetBubblePosition(bubble);
 
-            bubbleIndex++;
-        }
-    }*/
-    void BubbleObjectPooling(Vector3 previousPos, int activeBubbles)
-    {
-        for (int i = bubbleIndex; i < bubbles.Count; i++)
-        {
-            BubbleData bubble = bubbles[i];
-
-            if (activeBubbles >= amountAllowedAtOnce) break;
-
-            bubble.GetGameObject().SetActive(true);
-
-            if (bubble.GetGameObject().activeInHierarchy)
-                activeBubbles++;
-
-            ResetBubblePosition(bubble);
-
-            print($"Bubble Index: {bubbleIndex} - i: {i} \n Active Bubbles: {activeBubbles}");
             bubbleIndex++;
         }
     }
@@ -248,7 +238,7 @@ public class BubbleController : MonoBehaviour
         BubbleType type = (BubbleType)bubbleTypes.GetValue(rand.Next(bubbleTypes.Length));
         return type;
     }
-    SpawnPoint ChooseRandomSpawnPoint()
+    public static SpawnPoint ChooseRandomSpawnPoint()
     {
         Array spawnPoints = Enum.GetValues(typeof(SpawnPoint));
 

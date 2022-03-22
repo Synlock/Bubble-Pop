@@ -5,6 +5,8 @@ public class PlayerController : MonoBehaviour
 {
     static int score;
 
+    PowerUpController powerUpController;
+
     [SerializeField] LayerMask layer;
 
     Camera cam;
@@ -16,6 +18,7 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         cam = Camera.main;
+        powerUpController = FindObjectOfType<PowerUpController>();
 
         OnMousePressed += OnMousePressedHandler;
     }
@@ -38,11 +41,19 @@ public class PlayerController : MonoBehaviour
         if (Physics.Raycast(ray, out hit, 100f, layer))
         {
             var bubble = hit.collider.GetComponent<Bubble>();
+            if (bubble != null)
+            {
+                score += bubble.GetBubbleData().GetScore();
 
-            score += bubble.GetBubbleData().GetScore();
-
-            BubbleController.OnBubblePopped.Invoke(bubble.transform.position);
-            bubble.gameObject.SetActive(false);
+                BubbleController.OnBubblePopped.Invoke(bubble.transform.position);
+                bubble.gameObject.SetActive(false);
+            }
+            else 
+            {
+                var powerUp = hit.collider.GetComponent<PowerUp>();
+                powerUpController.PowerUpTypeController(BubbleController.Instance.GetBubbles(), powerUp.type);
+                Destroy(hit.collider.gameObject);
+            }
         }
     }
 }

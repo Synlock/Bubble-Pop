@@ -9,7 +9,7 @@ using UnityEngine.UI;
 public class LevelController : MonoBehaviour
 {
     #region Member Variables
-    static PlayerData playerData;
+    static PlayerData playerData = new PlayerData();
     [SerializeField] BubbleController bubbleController;
 
     GameObject defaultBubble;
@@ -48,11 +48,7 @@ public class LevelController : MonoBehaviour
     #region Initializers
     void Awake()
     {
-        if (playerData == null)
-            playerData = new PlayerData();
-
-        SaveLoad.ConvertAndLoadData(playerData, TAGS.PLAYER_FILE_NAME, Application.persistentDataPath);
-        print("Player Data.Level : " + playerData.GetLevel());
+        PlayerData.LoadPlayerData(playerData);
 
         defaultBubble = bubbleController.GetDefaultBubblePrefab();
         defaultVfx = bubbleController.GetDefaultPopVFX();
@@ -67,7 +63,6 @@ public class LevelController : MonoBehaviour
 
         InitLevelData();
     }
-
     void InitLevelData()
     {
         for (int i = 0; i < maxLevel; i++)
@@ -135,9 +130,10 @@ public class LevelController : MonoBehaviour
 
             //increase player level by 1 and save to local disk
             playerData.SetLevel(playerData.GetLevel() + 1);
-            SaveLoad.SaveAndConvertData(playerData, TAGS.PLAYER_FILE_NAME, Application.persistentDataPath);
+            PlayerData.SavePlayerData(playerData);
 
             //reset UI values
+            UiController.OnDisableUI.Invoke();
             levelTimeSlider.value = 0f;
             PlayerController.SetScore(0);
             SetHitPoints(maxHitPoints);
@@ -149,7 +145,7 @@ public class LevelController : MonoBehaviour
     {
         bool levelEnded = false;
 
-        //if level ends by time or hitpoints
+        //if level ends by hitpoints
         if (hitPoints <= 0)
             levelEnded = true;
 
@@ -160,6 +156,7 @@ public class LevelController : MonoBehaviour
             SceneManager.LoadSceneAsync("MainMenu", LoadSceneMode.Additive);
 
             //reset UI values
+            UiController.OnDisableUI.Invoke();
             levelTimeSlider.value = 0f;
             PlayerController.SetScore(0);
             SetHitPoints(maxHitPoints);

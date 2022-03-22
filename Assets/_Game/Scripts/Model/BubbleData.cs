@@ -6,9 +6,6 @@ public enum SpawnPoint { Top, Bottom, Left, Right }
 [System.Serializable]
 public class BubbleData
 {
-    //TODO:
-    //3. make bubbles poppable - improve
-    //4. implement score feature - improve
     [SerializeField] GameObject bubbleObj;
     [SerializeField] Transform bubbleTransform;
     [SerializeField] BubbleType bubbleType;
@@ -61,6 +58,15 @@ public class BubbleData
     public void SetStandardSpecs(bool isStandard) => standardSpecs = isStandard;
     #endregion
 
+    //This constructor is for PowerUp.cs
+    public BubbleData(SpawnPoint point, GameObject gameObject, Transform transform)
+    {
+        spawnPoint = point;
+        bubbleObj = gameObject;
+        bubbleTransform = transform;
+
+        SpawnPointHandler(point, transform);
+    }
     public BubbleData(
         GameObject bubbleObj, BubbleType bubbleType, Color color, ParticleSystem particles, AudioClip audioClip,
         SpawnPoint spawnPoint, int minScore, int maxScore, float speed = 20f, float timeBetweenSpawns = 2f, bool isStandard = true
