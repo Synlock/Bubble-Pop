@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Pool;
 
 public class BubbleController : MonoBehaviour
 {
@@ -104,7 +105,7 @@ public class BubbleController : MonoBehaviour
 
         foreach (ParticleSystem ps in popVFXs)
         {
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < 7; i++)
             {
                 GameObject vfxObj = Instantiate(ps.gameObject, popVFXsParent.transform);
                 popVFXsList.Add(vfxObj.GetComponent<ParticleSystem>());
@@ -140,6 +141,11 @@ public class BubbleController : MonoBehaviour
 
             bubbles[i] = data;
 
+            PlayerData playerData = new PlayerData();
+            PlayerData.LoadPlayerData(playerData);
+
+            bubbles[i].GetGameObject().GetComponent<MeshFilter>().mesh = playerData.selectedMesh;
+
             bubbles[i].GetGameObject().SetActive(false);
         }
     }
@@ -168,10 +174,10 @@ public class BubbleController : MonoBehaviour
                 true
                 );
 
-            PlayerData pd = new PlayerData();
-            PlayerData.LoadPlayerData(pd);
+            PlayerData playerData = new PlayerData();
+            PlayerData.LoadPlayerData(playerData);
 
-            newBubble.GetGameObject().GetComponent<MeshFilter>().mesh = pd.selectedMesh;
+            newBubble.GetGameObject().GetComponent<MeshFilter>().mesh = playerData.selectedMesh;
 
             bubbles.Add(newBubble);
             bubbleObj.SetActive(false);
@@ -179,38 +185,31 @@ public class BubbleController : MonoBehaviour
     }
 
     int bubbleIndex = 0;
+    public static int activeBubbles = 0;
     void OnBubblePoppedHandler(Vector3 previousPos)
     {
-        //TODO: fix object pool - first ball is bugged
         if (bubbleIndex >= bubbles.Count - 1)
             bubbleIndex = 0;
 
-        int activeBubbles = FindObjectsOfType<Bubble>().Length;
-        BubbleObjectPooling(previousPos, activeBubbles);
+        BubbleObjectPooling(previousPos);
     }
-
-    void BubbleObjectPooling(Vector3 previousPos, int activeBubbles)
+    void BubbleObjectPooling(Vector3 previousPos)
     {
         for (int i = bubbleIndex; i < bubbles.Count; i++)
         {
             BubbleData bubble = bubbles[i];
 
-            if (activeBubbles >= amountAllowedAtOnce)
-            {
-                gameStarted = true;
-
-                break;
-            }
+            if (activeBubbles >= amountAllowedAtOnce) { gameStarted = true; break; }
 
             if (gameStarted)
                 ActivateVFX(previousPos, bubble);
 
-            bubble.GetGameObject().SetActive(true);
-
-            if (bubble.GetGameObject().activeInHierarchy)
+            if (!bubble.GetGameObject().activeInHierarchy)
+            {
                 activeBubbles++;
-
-            ResetBubblePosition(bubble);
+                ResetBubblePosition(bubble);
+                bubble.GetGameObject().SetActive(true);
+            }
 
             bubbleIndex++;
         }

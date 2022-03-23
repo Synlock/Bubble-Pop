@@ -4,5 +4,11 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/_Game/Scenes/Roye Scene.unity
+    guid: c304c5eb6107e2743bcf617f43cfecba
+  - enabled: 1
+    path: Assets/_Game/Scenes/MainMenu.unity
+    guid: 46721e3b40ccafd459727dd9ea6e5608
   m_configObjects: {}

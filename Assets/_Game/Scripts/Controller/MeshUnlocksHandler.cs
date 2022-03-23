@@ -6,6 +6,7 @@ public class MeshUnlocksHandler : MonoBehaviour
     Transform myTransform;
     PlayerData playerData = new PlayerData();
     public List<MeshData> meshes = new List<MeshData>();
+    [SerializeField] MeshFilter displayObj;
 
     void Awake()
     {
@@ -16,6 +17,8 @@ public class MeshUnlocksHandler : MonoBehaviour
     void InitMeshIcons()
     {
         myTransform = transform;
+
+        displayObj.mesh = playerData.selectedMesh;
 
         for (int i = 0; i < myTransform.childCount; i++)
         {

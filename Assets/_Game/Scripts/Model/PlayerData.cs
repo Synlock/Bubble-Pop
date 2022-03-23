@@ -10,6 +10,8 @@ public class PlayerData
     public Mesh selectedMesh;
     //public List<ParticleSystem> unlockedParticleSystems = new List<ParticleSystem>();
 
+    public bool isFirstLoad = true;
+
     #region Getters
     public int GetLevel() => level;
     public int GetCoins() => coins;
@@ -22,7 +24,9 @@ public class PlayerData
 
     public PlayerData()
     {
-
+        level = 1;
+        coins = 0;
+        unlockedMeshes = new List<MeshData>();
     }
     public PlayerData(int level)
     {

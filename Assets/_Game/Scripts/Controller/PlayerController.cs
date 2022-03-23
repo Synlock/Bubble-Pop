@@ -45,6 +45,7 @@ public class PlayerController : MonoBehaviour
             {
                 score += bubble.GetBubbleData().GetScore();
 
+                BubbleController.activeBubbles--;
                 BubbleController.OnBubblePopped.Invoke(bubble.transform.position);
                 bubble.gameObject.SetActive(false);
             }

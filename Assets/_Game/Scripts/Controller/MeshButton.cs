@@ -10,6 +10,8 @@ public class MeshButton : MonoBehaviour
     Button button;
     TMP_Text priceText;
 
+    [SerializeField] MeshFilter displayObject;
+
     Action OnMeshButtonPress;
 
     void Awake()
@@ -25,6 +27,7 @@ public class MeshButton : MonoBehaviour
         meshData = playerData.unlockedMeshes[meshData.GetID()];
 
         InitMeshButton();
+        priceText.text = meshData.GetPrice().ToString();
         button.onClick.AddListener(() =>
         {
             OnMeshButtonPress.Invoke();
@@ -62,6 +65,8 @@ public class MeshButton : MonoBehaviour
 
     void BuyNewMesh(MeshData meshData)
     {
+        displayObject.mesh = meshData.mesh;
+
         if (playerData.coins >= meshData.GetPrice())
         {
             playerData.coins -= meshData.GetPrice();

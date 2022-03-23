@@ -6,6 +6,8 @@ using UnityEngine.UI;
 
 public class MainMenuController : MonoBehaviour
 {
+    PlayerData playerData = new PlayerData();
+
     [SerializeField] Button nextLvlBtn;
     [SerializeField] Button settingsBtn;
     [SerializeField] Button leaderboardBtn;
@@ -30,7 +32,10 @@ public class MainMenuController : MonoBehaviour
     }
     void Start()
     {
+        PlayerData.LoadPlayerData(playerData);
+
         InitMainMenuButtons();
+        InitCoinsText();
     }
 
     void InitMainMenuButtons()
@@ -59,6 +64,10 @@ public class MainMenuController : MonoBehaviour
                 OnInventoryPressed.Invoke();
             });
     }
+    void InitCoinsText()
+    {
+        coinsText.text = playerData.coins.ToString();
+    }
 
     void OnNextLevelPressedHandler()
     {
@@ -67,7 +76,7 @@ public class MainMenuController : MonoBehaviour
 
         BubbleController.OnInitBubbleController.Invoke();
         UiController.OnLoadUI.Invoke();
-        SceneManager.UnloadSceneAsync("MainMenu");
+        SceneManager.UnloadSceneAsync(TAGS.MAIN_MENU_SCENE_NAME);
     }
     void OnSettingsPressedHandler()
     {

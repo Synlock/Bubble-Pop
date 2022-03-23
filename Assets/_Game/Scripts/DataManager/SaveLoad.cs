@@ -2,6 +2,7 @@
 using System;
 using System.IO;
 using System.Text;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class SaveLoad
@@ -69,25 +70,36 @@ public class SaveLoad
     public static void SaveAndConvertData(object objToSave, string fileName, string dirPath)
     {
         string fullPath = dirPath + fileName;
+        FileStream stream;
 
         if (!File.Exists(fullPath))
-            File.Create(fullPath);
+        {
+            stream = File.Create(fullPath);
+            stream.Close();
+        }
 
         string json = SaveToJSON(objToSave, fullPath, dirPath);
         string encodedJson = EncodeToB64(json);
+
         File.WriteAllText(fullPath, encodedJson);
     }
     public static void ConvertAndLoadData(object objToLoad, string fileName, string dirPath)
     {
         string fullPath = dirPath + fileName;
+        FileStream stream;
 
         if (!File.Exists(fullPath))
-            File.Create(fullPath);
+        {
+            stream = File.Create(fullPath);
+            stream.Close();
+        }
 
         string encodedJson = File.ReadAllText(fullPath);
         string decodedJson = DecodeFromB64(encodedJson);
+
         LoadFromJSON(decodedJson, objToLoad);
     }
+
     //In progress vvv
     /*public static string ObfuscateJSON(object objToObfuscate)
     {
