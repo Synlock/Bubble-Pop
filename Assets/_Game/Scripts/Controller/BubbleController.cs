@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Pool;
 
 public class BubbleController : MonoBehaviour
 {
@@ -52,6 +51,7 @@ public class BubbleController : MonoBehaviour
     public void SetMaxBubbles(int newMaxBubbles) => maxBubbles = newMaxBubbles;
     public void SetAmountAllowed(int newAmountAllowed) => amountAllowedAtOnce = newAmountAllowed;
     public void SetChooseRandomly(bool isRandom) => chooseRandomly = isRandom;
+    public static void SetGameStarted(bool isStarted) => gameStarted = isStarted;
     #endregion
 
     public static Action<Vector3> OnBubblePopped;
@@ -59,7 +59,7 @@ public class BubbleController : MonoBehaviour
 
     void Awake()
     {
-        if(Instance == null)
+        if (Instance == null)
             Instance = this;
 
         OnInitBubbleController += OnInitBubbleControllerHandler;
@@ -105,7 +105,7 @@ public class BubbleController : MonoBehaviour
 
         foreach (ParticleSystem ps in popVFXs)
         {
-            for (int i = 0; i < 7; i++)
+            for (int i = 0; i < 12; i++)
             {
                 GameObject vfxObj = Instantiate(ps.gameObject, popVFXsParent.transform);
                 popVFXsList.Add(vfxObj.GetComponent<ParticleSystem>());
@@ -191,7 +191,10 @@ public class BubbleController : MonoBehaviour
         if (bubbleIndex >= bubbles.Count - 1)
             bubbleIndex = 0;
 
-        BubbleObjectPooling(previousPos);
+        if (BonusController.isBonus)
+            BonusPooling(previousPos);
+        else
+            BubbleObjectPooling(previousPos);
     }
     void BubbleObjectPooling(Vector3 previousPos)
     {
@@ -214,6 +217,22 @@ public class BubbleController : MonoBehaviour
             bubbleIndex++;
         }
     }
+    void BonusPooling(Vector3 previousPos)
+    {
+        for (int i = bubbleIndex; i < bubbles.Count; i++)
+        {
+            BubbleData bubble = bubbles[i];
+
+            if (!bubble.GetGameObject().activeInHierarchy)
+            {
+                ActivateVFX(previousPos, bubble);
+                ResetBubblePosition(bubble);
+                bubble.GetGameObject().SetActive(true);
+            }
+
+            bubbleIndex++;
+        }
+    }
 
     void ActivateVFX(Vector3 previousPos, BubbleData bubble)
     {
@@ -228,7 +247,6 @@ public class BubbleController : MonoBehaviour
             BubbleData.CalculateBubbleDirection(bubble.GetBubbleTransform().position, bubble.GetSpeed(), bubble.GetSpawnPoint())
             );
     }
-
     BubbleType ChooseRandomBubbleType()
     {
         Array bubbleTypes = Enum.GetValues(typeof(BubbleType));
@@ -243,6 +261,9 @@ public class BubbleController : MonoBehaviour
 
         System.Random rand = new System.Random();
         SpawnPoint point = (SpawnPoint)spawnPoints.GetValue(rand.Next(spawnPoints.Length));
+
+        if (point == SpawnPoint.Middle)
+            point = SpawnPoint.Top;
 
         return point;
     }

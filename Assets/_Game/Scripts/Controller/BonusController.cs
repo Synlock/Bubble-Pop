@@ -5,7 +5,6 @@ public class BonusController : MonoBehaviour
 {
     public static BonusController Instance;
     BubbleController bubbleController;
-    UiController uiController;
 
     public static Action OnStartBonus;
     public static bool isBonus;
@@ -26,7 +25,6 @@ public class BonusController : MonoBehaviour
     void Start()
     {
         bubbleController = FindObjectOfType<BubbleController>();
-        uiController = FindObjectOfType<UiController>();
     }
     void Update()
     {
@@ -41,7 +39,7 @@ public class BonusController : MonoBehaviour
             bubble.GetGameObject().SetActive(true);
 
             if (isBonus) continue;
-            BubbleController.ResetAllBubblePosition(bubbleController.GetBubbles());
+            BubbleController.Instance.ResetBubblePosition(bubble);
         }
         isBonus = true;
     }

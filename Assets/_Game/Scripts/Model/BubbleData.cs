@@ -1,7 +1,7 @@
 using UnityEngine;
 
 public enum BubbleType { Purple, Green, Blue, Orange, Yellow, Red }
-public enum SpawnPoint { Top, Bottom, Left, Right }
+public enum SpawnPoint { Top, Bottom, Left, Right, Middle }
 
 [System.Serializable]
 public class BubbleData
@@ -197,6 +197,10 @@ public class BubbleData
                 Vector3 rightSpawnPoint = new Vector3(worldPos.x + 10f, Random.Range(-10f, worldPos.y + 10f), 0f);
                 bubbleTransform.position = rightSpawnPoint;
                 break;
+            case SpawnPoint.Middle:
+                Vector3 middleSpawnPoint = new Vector3(Random.Range(5f,worldPos.x - 5f), Random.Range(5f, worldPos.y - 5f), 0f);
+                bubbleTransform.position = middleSpawnPoint;
+                break;
         }
     }
     public static Vector2 CalculateBubbleDirection(Vector2 startPos, float speed, SpawnPoint spawnPoint)
@@ -247,6 +251,12 @@ public class BubbleData
         else if (spawnPoint == SpawnPoint.Right && startPos.y > cutHeight)
         {
             dirToMove = MoveDir("SW", speed);
+            return dirToMove;
+        }
+        //Middle------------------------------------------------------------------------------
+        if (spawnPoint == SpawnPoint.Middle)
+        {
+            dirToMove = Vector2.zero;
             return dirToMove;
         }
         return dirToMove;

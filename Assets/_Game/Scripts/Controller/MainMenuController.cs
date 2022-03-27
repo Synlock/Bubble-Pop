@@ -9,10 +9,16 @@ public class MainMenuController : MonoBehaviour
     PlayerData playerData = new PlayerData();
 
     [SerializeField] Button nextLvlBtn;
+
     [SerializeField] Button settingsBtn;
+    [SerializeField] Button vibrationBtn;
+    [SerializeField] Button soundBtn;
+
     [SerializeField] Button leaderboardBtn;
+
     [SerializeField] Button inventoryBtn;
 
+    [SerializeField] Image settingsPanel;
     [SerializeField] Image inventoryPanel;
 
     [SerializeField] Image coinsImage;
@@ -20,13 +26,22 @@ public class MainMenuController : MonoBehaviour
 
     Action OnNextLevelPressed;
     Action OnSettingsPressed;
+    Action OnVibrationPressed;
+    Action OnSoundPressed;
     Action OnLeaderboardsPressed;
     Action OnInventoryPressed;
+
+    bool inventoryOpen = false;
+    bool settingsOpen = false;
+    bool vibrateOn = true;
+    bool soundOn = true;
 
     void Awake()
     {
         OnNextLevelPressed += OnNextLevelPressedHandler;
         OnSettingsPressed += OnSettingsPressedHandler;
+        OnVibrationPressed += OnVibrationPressedHandler;
+        OnSoundPressed += OnSoundPressedHandler;
         OnLeaderboardsPressed += OnLeaderboardsPressedHandler;
         OnInventoryPressed += OnInventoryPressedHandler;
     }
@@ -50,6 +65,16 @@ public class MainMenuController : MonoBehaviour
             settingsBtn.onClick.AddListener(() =>
             {
                 OnSettingsPressed.Invoke();
+            });
+        if (vibrationBtn != null)
+            vibrationBtn.onClick.AddListener(() =>
+            {
+                OnVibrationPressed.Invoke();
+            });
+        if (soundBtn != null)
+            soundBtn.onClick.AddListener(() =>
+            {
+                OnSoundPressed.Invoke();
             });
 
         if (leaderboardBtn != null)
@@ -78,16 +103,50 @@ public class MainMenuController : MonoBehaviour
         UiController.OnLoadUI.Invoke();
         SceneManager.UnloadSceneAsync(TAGS.MAIN_MENU_SCENE_NAME);
     }
+
     void OnSettingsPressedHandler()
     {
+        settingsOpen = !settingsOpen;
 
+        if (settingsOpen)
+            settingsPanel.gameObject.SetActive(true);
+        else settingsPanel.gameObject.SetActive(false);
+    }
+    void OnVibrationPressedHandler()
+    {
+        vibrateOn = !vibrateOn;
+        
+        if (vibrateOn)
+        {
+            vibrationBtn.image.color = Color.green;
+            //insert vibrate on here
+        }
+        else
+        {
+            vibrationBtn.image.color = Color.red;
+            //insert vibrate off here
+        }
+    }
+    void OnSoundPressedHandler()
+    {
+        soundOn = !soundOn;
+
+        if (soundOn)
+        {
+            soundBtn.image.color = Color.green;
+            //insert sound on here
+        }
+        else
+        {
+            soundBtn.image.color = Color.red;
+            //insert sound off here
+        }
     }
     void OnLeaderboardsPressedHandler()
     {
 
     }
 
-    bool inventoryOpen = false;
     void OnInventoryPressedHandler()
     {
         inventoryOpen = !inventoryOpen;
@@ -95,7 +154,5 @@ public class MainMenuController : MonoBehaviour
         if (inventoryOpen)
             inventoryPanel.gameObject.SetActive(true);
         else inventoryPanel.gameObject.SetActive(false);
-
-        
     }
 }

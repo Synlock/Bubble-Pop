@@ -13,7 +13,7 @@ public class SplashScreen : MonoBehaviour
     {
         yield return new WaitForSeconds(2f);
 
-        SceneManager.LoadSceneAsync(0);
+        SceneManager.LoadSceneAsync(TAGS.LEVEL_SCENE_NAME);
         SceneManager.LoadSceneAsync(TAGS.MAIN_MENU_SCENE_NAME, LoadSceneMode.Additive);
     }
 }

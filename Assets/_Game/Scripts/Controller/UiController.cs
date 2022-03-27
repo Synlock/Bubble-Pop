@@ -37,8 +37,13 @@ public class UiController : MonoBehaviour
     {
         if (BubbleController.GetGameStarted())
         {
-            UpdateSlider(levelTimeSlider, sliderTimeSpeed);
+            if (BonusController.isBonus)
+                UpdateBonusSlider(levelTimeSlider, sliderTimeSpeed);
+            else
+                UpdateSlider(levelTimeSlider, sliderTimeSpeed);
+
             UpdateScoreText(scoreText);
+
             LevelController.OnWinLevel.Invoke(levelTimeSlider, LevelController.GetLevelTime());
         }
     }
@@ -52,6 +57,11 @@ public class UiController : MonoBehaviour
     {
         time = Time.deltaTime;
         slider.value += speed * time;
+    }
+    void UpdateBonusSlider(Slider slider, float speed)
+    {
+        time = Time.deltaTime;
+        slider.value -= speed * time;
     }
     void UpdateScoreText(TMP_Text scoreText)
     {

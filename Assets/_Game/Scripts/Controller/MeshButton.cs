@@ -52,6 +52,7 @@ public class MeshButton : MonoBehaviour
         MeshData meshData = playerData.unlockedMeshes[this.meshData.GetID()];
         if (meshData.GetIsUnlocked())
         {
+            displayObject.mesh = meshData.mesh;
             priceText.gameObject.SetActive(false);
             playerData.selectedMesh = meshData.GetMesh();
             PlayerData.SavePlayerData(playerData);

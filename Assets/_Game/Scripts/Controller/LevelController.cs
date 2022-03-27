@@ -17,7 +17,7 @@ public class LevelController : MonoBehaviour
 
     [Tooltip("Set this to be the maximum number of levels")]
     public int maxLevel = 100;
-    
+
     static float staticLevelTime = 45f;
     [Tooltip("Time of levels in seconds")]
     [SerializeField] float levelTime = 45f;
@@ -118,28 +118,38 @@ public class LevelController : MonoBehaviour
     {
         bool levelEnded = false;
 
-        //if level ends by time or hitpoints
+        //if level ends by time
         if (levelTimeSlider.value >= levelTime)
             levelEnded = true;
 
+        if (levelTimeSlider.value <= 0 && BubbleController.GetGameStarted())
+            BonusController.endBonus = true;
+
         if (levelEnded)
-        {
-            bubbleController.ResetBubbleController();
+            BonusController.OnStartBonus.Invoke();
 
-            SceneManager.LoadSceneAsync("MainMenu", LoadSceneMode.Additive);
+        if (!BonusController.endBonus) return;
 
-            //increase player level by 1 and save to local disk
-            playerData.SetLevel(playerData.GetLevel() + 1);
-            PlayerData.SavePlayerData(playerData);
+        //reset the bubble controller to prepare for next level
+        bubbleController.ResetBubbleController();
+        
+        //load main menu scene
+        SceneManager.LoadSceneAsync(TAGS.MAIN_MENU_SCENE_NAME, LoadSceneMode.Additive);
 
-            //reset UI values
-            UiController.OnDisableUI.Invoke();
-            levelTimeSlider.value = 0f;
-            PlayerController.SetScore(0);
-            SetHitPoints(maxHitPoints);
-            levelEnded = false;
-            return;
-        }
+        //increase player level by 1 and save to local disk
+        playerData.SetLevel(playerData.GetLevel() + 1);
+        PlayerData.SavePlayerData(playerData);
+
+        //reset values
+        UiController.OnDisableUI.Invoke();
+        levelTimeSlider.value = 0f;
+        PlayerController.SetScore(0);
+        SetHitPoints(maxHitPoints);
+        BonusController.endBonus = false;
+        BonusController.isBonus = false;
+        BubbleController.activeBubbles = 0;
+        levelEnded = false;
+        return;
     }
     void OnLoseLevelHandler(Slider levelTimeSlider)
     {
@@ -153,7 +163,7 @@ public class LevelController : MonoBehaviour
         {
             bubbleController.ResetBubbleController();
 
-            SceneManager.LoadSceneAsync("MainMenu", LoadSceneMode.Additive);
+            SceneManager.LoadSceneAsync(TAGS.MAIN_MENU_SCENE_NAME, LoadSceneMode.Additive);
 
             //reset UI values
             UiController.OnDisableUI.Invoke();
